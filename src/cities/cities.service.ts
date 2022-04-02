@@ -25,7 +25,7 @@ export class CitiesService {
 
     if (!html) throw new NotFoundException()
 
-    console.log(pretty(html as string))
+    // console.log(pretty(html as string))
     const $ = load(html)
     const listItems = $('ul.list-group li')
     const regions = []
