@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common'
+import { UpcomingService } from './upcoming.service'
 
 @Controller('upcoming')
-export class UpcomingController {}
+export class UpcomingController {
+  constructor(private readonly upcomingService: UpcomingService) {}
+
+  @Get()
+  getUpcoming() {
+    return this.upcomingService.getUpcoming()
+  }
+}

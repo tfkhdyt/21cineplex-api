@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 import axios from 'axios'
-import pretty from 'pretty'
+// import pretty from 'pretty'
 import { load } from 'cheerio'
 
 import Region from '../types/City'
