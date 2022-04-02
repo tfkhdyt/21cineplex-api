@@ -41,7 +41,7 @@ export class CitiesService {
           .children('div')
           .attr('onclick')
           .split("'")[1]
-          .replace('gui.list_theater.php?sid=&city_id=', '')
+          .replace('gui.list_theater.php?sid=&city_id=', ''),
       )
       regions.push(region)
     })
