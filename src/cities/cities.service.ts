@@ -17,7 +17,16 @@ export class CitiesService {
     return this.scrapeCity()
   }
 
-  private async scrapeCity() {
+  async getCity(id: number) {
+    const cities = await this.scrapeCity()
+    const searchedCity = cities.find((city) => city.id === id)
+    if (!searchedCity || typeof searchedCity == null) {
+      throw new NotFoundException()
+    }
+    return searchedCity
+  }
+
+  private async scrapeCity(): Promise<Region[]> {
     const response = await axios.get(this.citiesUrl).catch((err) => {
       throw new BadGatewayException(err.message)
     })
@@ -28,7 +37,7 @@ export class CitiesService {
     // console.log(pretty(html as string))
     const $ = load(html)
     const listItems = $('ul.list-group li')
-    const regions = []
+    const regions: Region[] = []
 
     listItems.each((_, el) => {
       const region: Region = {

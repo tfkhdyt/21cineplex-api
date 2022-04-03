@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
-import pretty from 'pretty'
+// import pretty from 'pretty'
 import Movie from 'src/types/Movie'
 
 @Injectable()

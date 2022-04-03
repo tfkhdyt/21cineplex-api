@@ -18,7 +18,24 @@ export class TheatersService {
     return this.scrapeTheater(cityId)
   }
 
-  private async scrapeTheater(cityId: number) {
+  async getTheaterByTheaterId(theaterId: string, cityId: number) {
+    const theaters = await this.scrapeTheater(cityId)
+
+    const xxi = theaters.XXI.find((theater) => theater.id === theaterId)
+    if (xxi) return xxi
+
+    const premiere = theaters.premiere.find(
+      (theater) => theater.id === theaterId,
+    )
+    if (premiere) return premiere
+
+    const imax = theaters.imax.find((theater) => theater.id === theaterId)
+    if (imax) return imax
+
+    throw new NotFoundException()
+  }
+
+  private async scrapeTheater(cityId: number): Promise<Theaters> {
     const { data: html } = await axios
       .get(`${this.theatersUrl}&city_id=${cityId}`)
       .catch((err) => {
@@ -62,6 +79,12 @@ export class TheatersService {
         // theaters.push({ [theaterName]: theaters2 })
       })
 
+    if (
+      theaters.XXI.length == 0 &&
+      theaters.imax.length == 0 &&
+      theaters.premiere.length == 0
+    )
+      throw new NotFoundException()
     return theaters
   }
 }
