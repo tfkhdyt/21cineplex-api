@@ -14,7 +14,7 @@ export class TheatersService {
   private readonly theatersUrl =
     'https://m.21cineplex.com/gui.list_theater.php?sid='
 
-  getTheater(cityId: number) {
+  getTheaters(cityId: number) {
     return this.scrapeTheater(cityId)
   }
 

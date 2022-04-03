@@ -14,10 +14,10 @@ export class TheatersController {
   constructor(private readonly theatersService: TheatersService) {}
 
   @Get()
-  getTheaterByCityId(@Query('city_id') cityId = 10) {
+  getTheatersByCityId(@Query('city_id') cityId = 10) {
     if (!Number(cityId))
       throw new BadRequestException('city_id should be number')
-    return this.theatersService.getTheater(cityId)
+    return this.theatersService.getTheaters(cityId)
   }
 
   @Get(':theaterId')
