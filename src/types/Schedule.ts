@@ -9,8 +9,8 @@ export default interface Schedule {
   schedules: Schedules[]
 }
 
-interface Schedules extends Movie {
-  duration: string
+export interface Schedules {
+  movie: MovieDetail
   playTime: PlayTime[]
 }
 
@@ -23,4 +23,8 @@ interface PlayTime {
 interface Time {
   hour: string
   status: 'available' | 'sold out'
+}
+
+interface MovieDetail extends Movie {
+  duration: string
 }

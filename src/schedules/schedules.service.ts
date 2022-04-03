@@ -6,7 +6,7 @@ import {
 import axios from 'axios'
 import { load } from 'cheerio'
 import pretty from 'pretty'
-import Schedule from 'src/types/Schedule'
+import Schedule, { Schedules } from 'src/types/Schedule'
 
 @Injectable()
 export class SchedulesService {
@@ -27,7 +27,7 @@ export class SchedulesService {
 
     const $ = load(html)
 
-    console.log(pretty($.html()))
+    // console.log(pretty($.html()))
 
     const schedules: Schedule = {
       theater: {
@@ -48,6 +48,36 @@ export class SchedulesService {
       .text()
       .split('TELEPON:')[1]
       .trim()
+
+    $('li.list-group-item').each((idx, el) => {
+      const movieSchedule: Schedules = {
+        movie: {
+          id: null,
+          title: null,
+          type: null,
+          rating: null,
+          bannerUrl: null,
+          duration: null,
+        },
+        playTime: [],
+      }
+      movieSchedule.movie.id = $(el)
+        .children('a')
+        .attr('href')
+        .split('movie_id=')[1]
+      movieSchedule.movie.title = $(el).children('a').next().text()
+      movieSchedule.movie.type = $(el).find('span.btn').first().text()
+      movieSchedule.movie.rating = $(el).find('span.btn').first().next().text()
+      movieSchedule.movie.bannerUrl = $(el).find('img').attr('src')
+      movieSchedule.movie.duration = $(el)
+        .find('span.glyphicon-time')
+        .parent()
+        .text()
+        .trim()
+
+      console.log(idx + 1, pretty($(el).html()))
+      schedules.schedules.push(movieSchedule)
+    })
 
     return schedules
   }
