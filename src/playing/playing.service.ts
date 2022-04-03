@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common'
+import {
+  BadGatewayException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
 // import pretty from 'pretty'
@@ -11,13 +15,21 @@ export class PlayingService {
   private readonly playingUrl = 'https://m.21cineplex.com/index.php?sid='
 
   async getPlayings(cityId: number) {
-    const response = await axios.get(this.setRegionUrl + cityId)
+    const response = await axios
+      .get(this.setRegionUrl + cityId)
+      .catch((err) => {
+        throw new BadGatewayException(err.message)
+      })
     const cookie = response.headers['set-cookie'].join(';')
-    const { data: html } = await axios.get(this.playingUrl, {
-      headers: {
-        cookie,
-      },
-    })
+    const { data: html } = await axios
+      .get(this.playingUrl, {
+        headers: {
+          cookie,
+        },
+      })
+      .catch((err) => {
+        throw new NotFoundException(err.message)
+      })
 
     const $ = load(html)
 
