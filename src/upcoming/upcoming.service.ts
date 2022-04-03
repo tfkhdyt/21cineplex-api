@@ -17,6 +17,14 @@ export class UpcomingService {
     return this.scrapeUpcoming()
   }
 
+  async getUpcomingById(movieId: string) {
+    const movies = await this.scrapeUpcoming()
+    const searchedMovie = movies.find((movie) => movie.id === movieId)
+    if (!searchedMovie) throw new NotFoundException()
+
+    return searchedMovie
+  }
+
   private async scrapeUpcoming() {
     const { data: html } = await axios.get(this.upcomingUrl).catch((err) => {
       throw new BadGatewayException(err.message)
