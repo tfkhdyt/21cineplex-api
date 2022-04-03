@@ -18,19 +18,22 @@ export class TheatersService {
     return this.scrapeTheater(cityId)
   }
 
-  async getTheaterByTheaterId(theaterId: string, cityId: number) {
+  async getTheaterByTheaterId(
+    theaterId: string,
+    cityId: number,
+  ): Promise<Theater> {
     const theaters = await this.scrapeTheater(cityId)
 
     const xxi = theaters.XXI.find((theater) => theater.id === theaterId)
-    if (xxi) return xxi
+    if (xxi) return { ...xxi, type: 'XXI' }
 
     const premiere = theaters.premiere.find(
       (theater) => theater.id === theaterId,
     )
-    if (premiere) return premiere
+    if (premiere) return { ...premiere, type: 'premiere' }
 
     const imax = theaters.imax.find((theater) => theater.id === theaterId)
-    if (imax) return imax
+    if (imax) return { ...imax, type: 'imax' }
 
     throw new NotFoundException()
   }

@@ -11,7 +11,7 @@ export class CitiesController {
   }
 
   @Get(':id')
-  getCity(@Param('id', ParseIntPipe) id = 10) {
+  getCity(@Param('id', ParseIntPipe) id: number) {
     return this.citiesService.getCity(id)
   }
 }
