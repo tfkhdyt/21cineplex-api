@@ -5,8 +5,9 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
+import BaseMovie from 'src/movies/entities/base-movie.entity'
 // import pretty from 'pretty'
-import Movie from 'src/types/Movie'
+// import Movie from 'src/types/Movie'
 
 @Injectable()
 export class PlayingService {
@@ -44,10 +45,10 @@ export class PlayingService {
 
     const $ = load(html)
 
-    const playings: Movie[] = []
+    const playings: BaseMovie[] = []
 
-    $('.grid_movie').each((idx, el) => {
-      const movie: Movie = {
+    $('.grid_movie').each((_, el) => {
+      const movie: BaseMovie = {
         id: null,
         title: null,
         type: null,

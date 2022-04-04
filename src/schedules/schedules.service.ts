@@ -5,8 +5,12 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
+import PlayTime from './entities/playtime.entity'
+import Schedule from './entities/schedule.entity'
+import TheaterSchedule from './entities/theater-schedules.entity'
+import Time from './entities/time.entity'
 // import pretty from 'pretty'
-import Schedule, { PlayTime, Schedules, Time } from 'src/types/Schedule'
+// import Schedule, { PlayTime, Schedules, Time } from 'src/types/Schedule'
 
 @Injectable()
 export class SchedulesService {
@@ -36,13 +40,8 @@ export class SchedulesService {
 
     // console.log(pretty($.html()))
 
-    const schedules: Schedule = {
-      theater: {
-        name: null,
-        address: null,
-        phoneNumber: null,
-        locationUrl: null,
-      },
+    const schedules: TheaterSchedule = {
+      theater: null,
       schedules: [],
     }
 
@@ -62,8 +61,8 @@ export class SchedulesService {
       .attr('href')
       .replace('&output=embed', '')
 
-    $('li.list-group-item').each((idx, el) => {
-      const movieSchedule: Schedules = {
+    $('li.list-group-item').each((_, el) => {
+      const movieSchedule: Schedule = {
         movie: {
           id: null,
           title: null,
@@ -90,7 +89,7 @@ export class SchedulesService {
 
       $(el)
         .find('div.row')
-        .each((idx, el) => {
+        .each((_, el) => {
           const playTime: PlayTime = {
             date: null,
             price: null,
@@ -101,7 +100,7 @@ export class SchedulesService {
 
           $(el)
             .find('.div_schedule')
-            .each((idx, el) => {
+            .each((_, el) => {
               const time: Time = {
                 hour: null,
                 status: null,

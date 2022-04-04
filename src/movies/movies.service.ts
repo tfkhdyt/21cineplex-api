@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
+import Movie from './entities/movie.entity'
 // import pretty from 'pretty'
-import Movie from 'src/types/Movie'
 
 @Injectable()
 export class MoviesService {
@@ -42,7 +42,7 @@ export class MoviesService {
 
     movie.id = movieId
     movie.title = $(
-      'div.col-xs-8.col-sm-11.col-md-11[style="font-weight: bold"] > div'
+      'div.col-xs-8.col-sm-11.col-md-11[style="font-weight: bold"] > div',
     ).text()
     movie.type = $('a.btn.disabled').text().trim()
     movie.rating = $('img[height="50"]')

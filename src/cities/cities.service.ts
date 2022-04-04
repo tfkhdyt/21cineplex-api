@@ -6,8 +6,9 @@ import {
 import axios from 'axios'
 // import pretty from 'pretty'
 import { load } from 'cheerio'
+import City from './entities/city.entity'
 
-import Region from '../types/City'
+// import Region from '../types/City'
 
 @Injectable()
 export class CitiesService {
@@ -26,7 +27,7 @@ export class CitiesService {
     return searchedCity
   }
 
-  private async scrapeCity(): Promise<Region[]> {
+  private async scrapeCity(): Promise<City[]> {
     const response = await axios.get(this.citiesUrl).catch((err) => {
       throw new BadGatewayException(err.message)
     })
@@ -37,10 +38,10 @@ export class CitiesService {
     // console.log(pretty(html as string))
     const $ = load(html)
     const listItems = $('ul.list-group li')
-    const regions: Region[] = []
+    const regions: City[] = []
 
     listItems.each((_, el) => {
-      const region: Region = {
+      const region: City = {
         id: null,
         name: null,
       }

@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
+import BaseTheater from './entities/base-theater.entity'
+import TheaterType from './entities/theater-type.entity'
 // import pretty from 'pretty'
-import Theater from 'src/types/Theater'
-import Theaters from 'src/types/Theaters'
 
 @Injectable()
 export class TheatersService {
@@ -21,7 +21,7 @@ export class TheatersService {
   async getTheaterByTheaterId(
     theaterId: string,
     cityId: number,
-  ): Promise<Theater> {
+  ): Promise<BaseTheater> {
     const theaters = await this.scrapeTheater(cityId)
 
     const xxi = theaters.XXI.find((theater) => theater.id === theaterId)
@@ -38,7 +38,7 @@ export class TheatersService {
     throw new NotFoundException()
   }
 
-  private async scrapeTheater(cityId: number): Promise<Theaters> {
+  private async scrapeTheater(cityId: number): Promise<TheaterType> {
     const { data: html } = await axios
       .get(`${this.theatersUrl}&city_id=${cityId}`)
       .catch((err) => {
@@ -48,7 +48,7 @@ export class TheatersService {
 
     const $ = load(html)
 
-    const theaters: Theaters = {
+    const theaters: TheaterType = {
       XXI: null,
       premiere: null,
       imax: null,
@@ -59,11 +59,11 @@ export class TheatersService {
       .each((_, el) => {
         let theaterName = $(el).attr('class')
         theaterName = theaterName === 'all' ? 'XXI' : theaterName
-        const theaters2: Theater[] = []
+        const theaters2: BaseTheater[] = []
         $(el)
           .children('li')
           .each((_, el) => {
-            const theater: Theater = {
+            const theater: BaseTheater = {
               id: null,
               name: null,
             }
