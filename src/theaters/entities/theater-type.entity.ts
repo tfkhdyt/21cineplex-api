@@ -1,7 +1,9 @@
-import Theater from './theater.entity'
+import { ApiProperty } from '@nestjs/swagger'
+import BaseTheater from './base-theater.entity'
 
 export default class TheaterType {
-  XXI: Theater[]
-  premiere: Theater[]
-  imax: Theater[]
+  @ApiProperty()
+  XXI: BaseTheater[]
+  premiere: BaseTheater[]
+  imax: BaseTheater[]
 }

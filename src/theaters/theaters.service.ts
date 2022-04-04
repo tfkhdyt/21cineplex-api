@@ -6,6 +6,7 @@ import {
 import axios from 'axios'
 import { load } from 'cheerio'
 import BaseTheater from './entities/base-theater.entity'
+import TheaterDetail from './entities/theater-detail.entity'
 import TheaterType from './entities/theater-type.entity'
 // import pretty from 'pretty'
 
@@ -21,7 +22,7 @@ export class TheatersService {
   async getTheaterByTheaterId(
     theaterId: string,
     cityId: number,
-  ): Promise<BaseTheater> {
+  ): Promise<TheaterDetail> {
     const theaters = await this.scrapeTheater(cityId)
 
     const xxi = theaters.XXI.find((theater) => theater.id === theaterId)
