@@ -6,5 +6,7 @@ import { ApiExcludeController } from '@nestjs/swagger'
 export class AppController {
   @Get()
   @Redirect('/docs', 301)
-  redirectToSwaggerDocs() {}
+  redirectToSwaggerDocs() {
+    return
+  }
 }
