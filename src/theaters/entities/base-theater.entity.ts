@@ -1,5 +1,5 @@
 export default class BaseTheater {
-  id: string
+  id?: string
   name: string
   type?: 'XXI' | 'premiere' | 'imax'
 }

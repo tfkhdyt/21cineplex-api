@@ -41,7 +41,12 @@ export class SchedulesService {
     // console.log(pretty($.html()))
 
     const schedules: TheaterSchedule = {
-      theater: null,
+      theater: {
+        name: null,
+        address: null,
+        phoneNumber: null,
+        locationUrl: null,
+      },
       schedules: [],
     }
 
