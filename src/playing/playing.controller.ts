@@ -5,8 +5,10 @@ import {
   Param,
   Query,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { PlayingService } from './playing.service'
 
+@ApiTags('playing')
 @Controller('playing')
 export class PlayingController {
   constructor(private readonly playingService: PlayingService) {}

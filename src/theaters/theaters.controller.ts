@@ -6,9 +6,11 @@ import {
   // ParseIntPipe,
   Query,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 // import GetTheaterDto from './dto/get-theater.dto'
 import { TheatersService } from './theaters.service'
 
+@ApiTags('theaters')
 @Controller('theaters')
 export class TheatersController {
   constructor(private readonly theatersService: TheatersService) {}
