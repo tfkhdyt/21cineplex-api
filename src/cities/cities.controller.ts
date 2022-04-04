@@ -46,8 +46,8 @@ export class CitiesController {
   @ApiInternalServerErrorResponse({
     description: 'Internal server error',
   })
-  @Get(':id')
-  getCity(@Param('id', ParseIntPipe) id: number) {
+  @Get(':city_id')
+  getCity(@Param('city_id', ParseIntPipe) id: number) {
     return this.citiesService.getCity(id)
   }
 }

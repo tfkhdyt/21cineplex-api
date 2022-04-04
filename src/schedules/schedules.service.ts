@@ -42,6 +42,7 @@ export class SchedulesService {
 
     const schedules: TheaterSchedule = {
       theater: {
+        id: null,
         name: null,
         address: null,
         phoneNumber: null,
@@ -50,6 +51,7 @@ export class SchedulesService {
       schedules: [],
     }
 
+    schedules.theater.id = theaterId
     schedules.theater.name = $('h4 > span > strong').text()
     schedules.theater.address = $('h4 > span[style="font-size:14px"]')
       .html()

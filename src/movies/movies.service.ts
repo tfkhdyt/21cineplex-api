@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
 import Movie from './entities/movie.entity'
@@ -17,7 +17,7 @@ export class MoviesService {
     const { data: html } = await axios
       .get(this.movieUrl + movieId)
       .catch((err) => {
-        throw new BadRequestException(err.message)
+        throw new NotFoundException(err.message)
       })
 
     const $ = load(html)
