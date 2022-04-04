@@ -21,6 +21,7 @@ export class PlayingService {
   async getPlayingById(movieId: string, cityId: number) {
     const playings = await this.scrapePlayings(cityId)
     const searchedPlaying = playings.find((playing) => playing.id === movieId)
+    if (!searchedPlaying) throw new NotFoundException()
     return searchedPlaying
   }
 

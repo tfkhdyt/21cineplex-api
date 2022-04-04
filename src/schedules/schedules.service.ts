@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
-import pretty from 'pretty'
+// import pretty from 'pretty'
 import Schedule, { PlayTime, Schedules, Time } from 'src/types/Schedule'
 
 @Injectable()
@@ -13,8 +13,15 @@ export class SchedulesService {
   private readonly schedulesUrl =
     'https://m.21cineplex.com/gui.schedule.php?sid=&find_by=1&cinema_id='
 
-  getSchedule(theaterId: string) {
+  getSchedules(theaterId: string) {
     return this.scrapeSchedule(theaterId)
+  }
+
+  async getScheduleByMovieId(theaterId: string, movieId: string) {
+    const { schedules } = await this.scrapeSchedule(theaterId)
+    const schedule = schedules.find((movie) => movie.movie.id === movieId)
+    if (!schedule) throw new NotFoundException()
+    return schedule
   }
 
   private async scrapeSchedule(theaterId: string) {
@@ -96,9 +103,11 @@ export class SchedulesService {
               }
 
               time.hour = $(el).text()
-              // time.status = $(el).paren
+              time.status = $(el).hasClass('disabled')
+                ? 'unavailable'
+                : 'available'
 
-              console.log(idx + 1, pretty($(el).html()))
+              // console.log(idx + 1, pretty($(el).html()))
 
               playTime.time.push(time)
             })

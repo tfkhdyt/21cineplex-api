@@ -22,7 +22,7 @@ export interface PlayTime {
 
 export interface Time {
   hour: string
-  status: 'available' | 'not available'
+  status: 'available' | 'unavailable'
 }
 
 interface MovieDetail extends Movie {
