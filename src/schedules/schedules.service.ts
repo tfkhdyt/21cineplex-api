@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
-// import pretty from 'pretty'
+import pretty from 'pretty'
 import Schedule, { PlayTime, Schedules, Time } from 'src/types/Schedule'
 
 @Injectable()
@@ -41,6 +41,7 @@ export class SchedulesService {
         name: null,
         address: null,
         phoneNumber: null,
+        locationUrl: null,
       },
       schedules: [],
     }
@@ -56,6 +57,10 @@ export class SchedulesService {
       .split('TELEPON')[1]
       .replace(':', '')
       .trim()
+
+    schedules.theater.locationUrl = $('.map-link')
+      .attr('href')
+      .replace('&output=embed', '')
 
     $('li.list-group-item').each((idx, el) => {
       const movieSchedule: Schedules = {

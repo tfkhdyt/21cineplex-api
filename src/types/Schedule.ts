@@ -5,6 +5,7 @@ export default interface Schedule {
     name: string
     address: string
     phoneNumber: string
+    locationUrl: string
   }
   schedules: Schedules[]
 }
