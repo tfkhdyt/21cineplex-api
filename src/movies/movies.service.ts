@@ -1,4 +1,107 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common'
+import axios from 'axios'
+import { load } from 'cheerio'
+// import pretty from 'pretty'
+import Movie from 'src/types/Movie'
 
 @Injectable()
-export class MoviesService {}
+export class MoviesService {
+  private readonly movieUrl =
+    'https://m.21cineplex.com/gui.movie_details.php?sid=&movie_id='
+
+  findMovieById(movieId: string) {
+    return this.scrapeMovie(movieId)
+  }
+
+  private async scrapeMovie(movieId: string) {
+    const { data: html } = await axios
+      .get(this.movieUrl + movieId)
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
+
+    const $ = load(html)
+
+    const movie: Movie = {
+      id: null,
+      title: null,
+      type: null,
+      rating: null,
+      genre: [],
+      duration: null,
+      bannerUrl: null,
+      trailerUrl: null,
+      description: null,
+      producer: [],
+      director: [],
+      writer: [],
+      cast: [],
+      distributor: [],
+      website: null,
+    }
+
+    movie.id = movieId
+    movie.title = $(
+      'div.col-xs-8.col-sm-11.col-md-11[style="font-weight: bold"] > div'
+    ).text()
+    movie.type = $('a.btn.disabled').text().trim()
+    movie.rating = $('img[height="50"]')
+      .attr('src')
+      .split('/')[1]
+      .split('.')[0]
+      .toUpperCase()
+    movie.bannerUrl = $('img.img-responsive').attr('src')
+    movie.duration = $('.glyphicon-time').parent().text().trim()
+    movie.description = $('#description').text()
+    movie.producer = $('strong:contains("Producer")')
+      .parent()
+      .next()
+      .text()
+      .split(',')
+      .map((value) => value.trim())
+    movie.director = $('strong:contains("Director")')
+      .parent()
+      .next()
+      .text()
+      .split(',')
+      .map((value) => value.trim())
+    movie.writer = $('strong:contains("Writer")')
+      .parent()
+      .next()
+      .text()
+      .split(',')
+      .map((value) => value.trim())
+    movie.cast = $('strong:contains("Cast")')
+      .parent()
+      .next()
+      .text()
+      .split(',')
+      .map((value) => value.trim())
+    movie.genre = $('div.col-xs-8.col-sm-11.col-md-11')
+      .next()
+      .find('div')
+      .text()
+      .split(',')
+      .map((value) => value.trim())
+    movie.distributor = $('strong:contains("Distributor")')
+      .parent()
+      .next()
+      .text()
+      .split(',')
+      .map((value) => value.trim())
+    movie.website = $('strong:contains("Website")')
+      .parent()
+      .next()
+      .find('a')
+      .attr('href')
+    movie.trailerUrl = $('button:contains("TRAILER")')
+      .attr('onclick')
+      .split("'")[1]
+
+    // console.log(pretty($('.main-content').html(), { ocd: true }))
+
+    // console.log($('strong:contains("Producer:")').text())
+
+    return movie
+  }
+}
