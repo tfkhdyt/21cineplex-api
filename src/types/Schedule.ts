@@ -14,15 +14,15 @@ export interface Schedules {
   playTime: PlayTime[]
 }
 
-interface PlayTime {
+export interface PlayTime {
   date: string
   price: string
   time: Time[]
 }
 
-interface Time {
+export interface Time {
   hour: string
-  status: 'available' | 'sold out'
+  status: 'available' | 'not available'
 }
 
 interface MovieDetail extends Movie {

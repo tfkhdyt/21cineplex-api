@@ -6,7 +6,7 @@ import {
 import axios from 'axios'
 import { load } from 'cheerio'
 import pretty from 'pretty'
-import Schedule, { Schedules } from 'src/types/Schedule'
+import Schedule, { PlayTime, Schedules, Time } from 'src/types/Schedule'
 
 @Injectable()
 export class SchedulesService {
@@ -42,11 +42,12 @@ export class SchedulesService {
     schedules.theater.address = $('h4 > span[style="font-size:14px"]')
       .html()
       .replace(/<br\s*\/?>/gi, ' ')
-      .split('TELEPON:')[0]
+      .split('TELEPON')[0]
       .trim()
     schedules.theater.phoneNumber = $('h4 > span[style="font-size:14px"]')
       .text()
-      .split('TELEPON:')[1]
+      .split('TELEPON')[1]
+      .replace(':', '')
       .trim()
 
     $('li.list-group-item').each((idx, el) => {
@@ -56,8 +57,8 @@ export class SchedulesService {
           title: null,
           type: null,
           rating: null,
-          bannerUrl: null,
           duration: null,
+          bannerUrl: null,
         },
         playTime: [],
       }
@@ -75,7 +76,39 @@ export class SchedulesService {
         .text()
         .trim()
 
-      console.log(idx + 1, pretty($(el).html()))
+      $(el)
+        .find('div.row')
+        .each((idx, el) => {
+          const playTime: PlayTime = {
+            date: null,
+            price: null,
+            time: [],
+          }
+          playTime.date = $(el).find('.col-xs-7').text()
+          playTime.price = $(el).find('.p_price').text()
+
+          $(el)
+            .find('.div_schedule')
+            .each((idx, el) => {
+              const time: Time = {
+                hour: null,
+                status: null,
+              }
+
+              time.hour = $(el).text()
+              // time.status = $(el).paren
+
+              console.log(idx + 1, pretty($(el).html()))
+
+              playTime.time.push(time)
+            })
+
+          movieSchedule.playTime.push(playTime)
+          // console.log(playTime)
+          // console.log(idx + 1, pretty($(el).html()))
+        })
+      // console.log(idx + 1, pretty($(el).html()))
+
       schedules.schedules.push(movieSchedule)
     })
 

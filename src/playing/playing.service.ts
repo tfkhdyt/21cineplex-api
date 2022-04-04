@@ -14,7 +14,17 @@ export class PlayingService {
     'https://m.21cineplex.com/gui.list_theater.php?sid=&city_id='
   private readonly playingUrl = 'https://m.21cineplex.com/index.php?sid='
 
-  async getPlayings(cityId: number) {
+  getPlayings(cityId: number) {
+    return this.scrapePlayings(cityId)
+  }
+
+  async getPlayingById(movieId: string, cityId: number) {
+    const playings = await this.scrapePlayings(cityId)
+    const searchedPlaying = playings.find((playing) => playing.id === movieId)
+    return searchedPlaying
+  }
+
+  private async scrapePlayings(cityId: number) {
     const response = await axios
       .get(this.setRegionUrl + cityId)
       .catch((err) => {
