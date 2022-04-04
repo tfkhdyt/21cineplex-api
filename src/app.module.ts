@@ -5,6 +5,7 @@ import { UpcomingModule } from './upcoming/upcoming.module'
 import { SchedulesModule } from './schedules/schedules.module'
 import { PlayingModule } from './playing/playing.module'
 import { MoviesModule } from './movies/movies.module'
+import { AppController } from './app.controller'
 
 @Module({
   imports: [
@@ -15,5 +16,6 @@ import { MoviesModule } from './movies/movies.module'
     PlayingModule,
     MoviesModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
