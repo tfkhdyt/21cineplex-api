@@ -6,6 +6,7 @@ import { SchedulesModule } from './schedules/schedules.module'
 import { PlayingModule } from './playing/playing.module'
 import { MoviesModule } from './movies/movies.module'
 import { AppController } from './app.controller'
+import { FoodsModule } from './foods/foods.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AppController } from './app.controller'
     SchedulesModule,
     PlayingModule,
     MoviesModule,
+    FoodsModule,
   ],
   controllers: [AppController],
 })
