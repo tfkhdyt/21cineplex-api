@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common'
 import axios from 'axios'
 import { load } from 'cheerio'
 // import pretty from 'pretty'
@@ -38,7 +42,7 @@ export class FoodsService {
       // console.log(category)
 
       $(
-        `#${category} > .list-group > li > .list-group > li.list-group-item > .row`,
+        `#${category} > .list-group > li > .list-group > li.list-group-item > .row`
       ).each((_, el) => {
         const food: Food = {
           name: null,
@@ -61,6 +65,12 @@ export class FoodsService {
         // console.log(idx + 1, pretty($(el).html()))
       })
     }
+
+    const allEmpty = Object.keys(foodCategory).every(function (key) {
+      return foodCategory[key].length === 0
+    })
+
+    if (allEmpty) throw new NotFoundException()
 
     return foodCategory
 

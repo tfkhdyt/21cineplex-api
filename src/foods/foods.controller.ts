@@ -2,6 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger'
@@ -16,6 +17,9 @@ export class FoodsController {
   @ApiOkResponse({
     description: 'Retrieve all foods data that available on a theater',
     type: FoodCategory,
+  })
+  @ApiNotFoundResponse({
+    description: 'Foods not found',
   })
   @ApiBadRequestResponse({
     description: 'theater_id is not valid',
