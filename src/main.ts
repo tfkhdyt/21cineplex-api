@@ -1,6 +1,10 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import {
+  DocumentBuilder,
+  ExpressSwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger'
 import cookieParser from 'cookie-parser'
 import { AppModule } from './app.module'
 
@@ -18,7 +22,12 @@ async function bootstrap() {
     .setVersion('v1')
     .build()
   const document = SwaggerModule.createDocument(app, options)
-  SwaggerModule.setup('docs', app, document)
+
+  const costumOptions: ExpressSwaggerCustomOptions = {
+    customSiteTitle: '21Cineplex API',
+  }
+
+  SwaggerModule.setup('docs', app, document, costumOptions)
 
   await app.listen(PORT)
 }
