@@ -42,7 +42,7 @@ export class FoodsService {
       // console.log(category)
 
       $(
-        `#${category} > .list-group > li > .list-group > li.list-group-item > .row`
+        `#${category} > .list-group > li > .list-group > li.list-group-item > .row`,
       ).each((_, el) => {
         const food: Food = {
           name: null,

@@ -15,11 +15,11 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger'
-import CityId from './dto/city-id.dto'
+
 import TheaterDetail from './entities/theater-detail.entity'
 import TheaterType from './entities/theater-type.entity'
-// import GetTheaterDto from './dto/get-theater.dto'
 import { TheatersService } from './theaters.service'
+import CityId from './dto/city-id.dto'
 
 @ApiTags('theaters')
 @Controller('theaters')

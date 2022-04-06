@@ -1,4 +1,3 @@
-import { Controller, Get, Param } from '@nestjs/common'
 import {
   ApiBadGatewayResponse,
   ApiInternalServerErrorResponse,
@@ -6,9 +5,11 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger'
-import Schedule from './entities/schedule.entity'
+import { Controller, Get, Param } from '@nestjs/common'
+
 import TheaterSchedule from './entities/theater-schedules.entity'
 import { SchedulesService } from './schedules.service'
+import Schedule from './entities/schedule.entity'
 
 @ApiTags('schedules')
 @Controller('schedules')
