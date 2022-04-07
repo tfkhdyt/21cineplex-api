@@ -33,7 +33,6 @@
     "class-validator": "^0.13.2",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
-    "csurf": "^1.11.0",
     "helmet": "^5.0.2",
     "pretty": "^2.0.0",
     "reflect-metadata": "^0.1.13",
