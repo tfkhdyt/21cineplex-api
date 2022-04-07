@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import axios, { Axios } from 'axios'
 import { load } from 'cheerio'
 
 import TheaterSchedule from './entities/theater-schedules.entity'
+import { AxiosService } from 'src/axios/axios.service'
 import PlayTime from './entities/playtime.entity'
 import Schedule from './entities/schedule.entity'
 import Time from './entities/time.entity'
@@ -14,13 +14,8 @@ import Time from './entities/time.entity'
 @Injectable()
 export class SchedulesService {
   private readonly schedulesUrl = 'gui.schedule.php?sid=&find_by=1'
-  private readonly axios: Axios
 
-  constructor() {
-    this.axios = axios.create({
-      baseURL: 'https://m.21cineplex.com',
-    })
-  }
+  constructor(private readonly axiosService: AxiosService) {}
 
   getSchedules(theaterId: string) {
     return this.scrapeSchedule(theaterId)
@@ -34,7 +29,7 @@ export class SchedulesService {
   }
 
   private async scrapeSchedule(theaterId: string) {
-    const { data: html } = await this.axios
+    const { data: html } = await this.axiosService.request
       .get(`${this.schedulesUrl}&cinema_id=${theaterId}`)
       .catch((err) => {
         throw new BadGatewayException(err.message)

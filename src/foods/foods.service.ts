@@ -3,24 +3,25 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import axios from 'axios'
 import { load } from 'cheerio'
-// import pretty from 'pretty'
+
 import FoodCategory from './entities/food-category.entity'
+import { AxiosService } from 'src/axios/axios.service'
 import Food from './entities/food.entity'
 
 @Injectable()
 export class FoodsService {
-  private readonly foodsUrl =
-    'https://m.21cineplex.com/gui.fnb_product.php?sid=&cinema_id='
+  private readonly foodsUrl = 'gui.fnb_product.php?sid='
+
+  constructor(private readonly axiosService: AxiosService) {}
 
   findAll(theaterId: string) {
     return this.scrapeFoods(theaterId)
   }
 
   private async scrapeFoods(theaterId: string) {
-    const { data: html } = await axios
-      .get(this.foodsUrl + theaterId)
+    const { data: html } = await this.axiosService.request
+      .get(`${this.foodsUrl}&cinema_id=${theaterId}`)
       .catch((err) => {
         throw new BadRequestException(err.message)
       })

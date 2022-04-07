@@ -1,21 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import axios from 'axios'
 import { load } from 'cheerio'
+
+import { AxiosService } from 'src/axios/axios.service'
 import Movie from './entities/movie.entity'
 // import pretty from 'pretty'
 
 @Injectable()
 export class MoviesService {
-  private readonly movieUrl =
-    'https://m.21cineplex.com/gui.movie_details.php?sid=&movie_id='
+  private readonly movieUrl = 'gui.movie_details.php?sid='
+
+  constructor(private readonly axiosService: AxiosService) {}
 
   findMovieById(movieId: string) {
     return this.scrapeMovie(movieId)
   }
 
   private async scrapeMovie(movieId: string) {
-    const { data: html } = await axios
-      .get(this.movieUrl + movieId)
+    const { data: html } = await this.axiosService.request
+      .get(`${this.movieUrl}&movie_id=${movieId}`)
       .catch((err) => {
         throw new NotFoundException(err.message)
       })

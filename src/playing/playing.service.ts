@@ -3,17 +3,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import axios from 'axios'
 import { load } from 'cheerio'
+
 import BaseMovie from 'src/movies/entities/base-movie.entity'
+import { AxiosService } from 'src/axios/axios.service'
 // import pretty from 'pretty'
 // import Movie from 'src/types/Movie'
 
 @Injectable()
 export class PlayingService {
-  private readonly setRegionUrl =
-    'https://m.21cineplex.com/gui.list_theater.php?sid=&city_id='
-  private readonly playingUrl = 'https://m.21cineplex.com/index.php?sid='
+  private readonly setRegionUrl = 'gui.list_theater.php?sid='
+  private readonly playingUrl = 'index.php?sid='
+
+  constructor(private readonly axiosService: AxiosService) {}
 
   getPlayings(cityId: number) {
     return this.scrapePlayings(cityId)
@@ -27,13 +29,13 @@ export class PlayingService {
   }
 
   private async scrapePlayings(cityId: number) {
-    const response = await axios
-      .get(this.setRegionUrl + cityId)
+    const response = await this.axiosService.request
+      .get(`${this.setRegionUrl}&city_id=${cityId}`)
       .catch((err) => {
         throw new BadGatewayException(err.message)
       })
     const cookie = response.headers['set-cookie'].join(';')
-    const { data: html } = await axios
+    const { data: html } = await this.axiosService.request
       .get(this.playingUrl, {
         headers: {
           cookie,

@@ -3,16 +3,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import axios from 'axios'
 import { load } from 'cheerio'
+
 import BaseMovie from 'src/movies/entities/base-movie.entity'
+import { AxiosService } from 'src/axios/axios.service'
 
 // import pretty from 'pretty'
 
 @Injectable()
 export class UpcomingService {
-  private readonly upcomingUrl =
-    'https://m.21cineplex.com/gui.coming_soon.php?order=2&sid='
+  private readonly upcomingUrl = 'gui.coming_soon.php?order=2&sid='
+
+  constructor(private readonly axiosService: AxiosService) {}
 
   getUpcoming() {
     return this.scrapeUpcoming()
@@ -27,9 +29,11 @@ export class UpcomingService {
   }
 
   private async scrapeUpcoming() {
-    const { data: html } = await axios.get(this.upcomingUrl).catch((err) => {
-      throw new BadGatewayException(err.message)
-    })
+    const { data: html } = await this.axiosService.request
+      .get(this.upcomingUrl)
+      .catch((err) => {
+        throw new BadGatewayException(err.message)
+      })
     if (!html) throw new NotFoundException()
 
     const $ = load(html)

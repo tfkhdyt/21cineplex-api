@@ -10,6 +10,7 @@ import { CitiesModule } from './cities/cities.module'
 import { MoviesModule } from './movies/movies.module'
 import { FoodsModule } from './foods/foods.module'
 import { AppController } from './app.controller'
+import { AxiosModule } from './axios/axios.module'
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AppController } from './app.controller'
       ttl: 60,
       limit: 10,
     }),
+    AxiosModule,
   ],
   controllers: [AppController],
   providers: [

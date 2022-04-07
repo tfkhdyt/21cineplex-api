@@ -3,16 +3,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import axios from 'axios'
 // import pretty from 'pretty'
 import { load } from 'cheerio'
+
+import { AxiosService } from 'src/axios/axios.service'
 import City from './entities/city.entity'
 
 // import Region from '../types/City'
 
 @Injectable()
 export class CitiesService {
-  private readonly citiesUrl = 'https://m.21cineplex.com/gui.list_city.php?sid='
+  private readonly citiesUrl = 'gui.list_city.php?sid='
+
+  constructor(private readonly axiosService: AxiosService) {}
 
   getCities() {
     return this.scrapeCity()
@@ -28,9 +31,11 @@ export class CitiesService {
   }
 
   private async scrapeCity(): Promise<City[]> {
-    const response = await axios.get(this.citiesUrl).catch((err) => {
-      throw new BadGatewayException(err.message)
-    })
+    const response = await this.axiosService.request
+      .get(this.citiesUrl)
+      .catch((err) => {
+        throw new BadGatewayException(err.message)
+      })
     const html = response.data
 
     if (!html) throw new NotFoundException()
