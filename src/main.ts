@@ -1,19 +1,25 @@
-import { ValidationPipe } from '@nestjs/common'
-import { NestFactory } from '@nestjs/core'
 import {
   DocumentBuilder,
   ExpressSwaggerCustomOptions,
   SwaggerModule,
 } from '@nestjs/swagger'
+import { ValidationPipe } from '@nestjs/common'
+import { NestFactory } from '@nestjs/core'
 import cookieParser from 'cookie-parser'
+import compression from 'compression'
+import helmet from 'helmet'
+
 import { AppModule } from './app.module'
 
 const PORT = process.env.PORT || 3000
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  app.enableCors({ origin: '*' })
+  app.use(helmet())
+  app.use(compression())
   app.use(cookieParser())
+  // app.use(csurf())
+  app.enableCors()
   app.useGlobalPipes(new ValidationPipe())
 
   const options = new DocumentBuilder()
