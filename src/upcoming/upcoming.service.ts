@@ -59,6 +59,7 @@ export class UpcomingService {
       movies.push(movie)
     })
 
+    // console.log('upcoming movies', movies)
     return movies
   }
 }
